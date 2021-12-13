@@ -1,5 +1,5 @@
 {
-    "name": "cclark61/php-rpi-ws2812-client",
+    "name": "cclark61/php-rpi-ws2812",
     "desc": "PHP Raspberry PI Client",
     "version": "0.1.0",
     "require": {
@@ -9,7 +9,7 @@
     "repositories": [],
     "autoload": {
         "psr-4": {
-            "Cclark61\\RaspPi\\WS2812\\": "src"
+            "Cclark61\\RPi\\WS2812\\": "src"
         }
     },
     "scripts-dev": {
