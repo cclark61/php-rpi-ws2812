@@ -6,7 +6,7 @@
  *
  * @package         Cclark61\RPi\WS2812
  * @author          Christian J. Clark
- * @copyright       Secure The Church LLC
+ * @copyright       Christian J. Clark
  * @link            https://github.com/cclark61/php-rpi-ws2812
  **/
 //*****************************************************************************
