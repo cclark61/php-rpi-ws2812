@@ -1,0 +1,23 @@
+{
+    "name": "cclark61/php-rpi-ws2812-client",
+    "desc": "PHP Raspberry PI Client",
+    "version": "0.1.0",
+    "require": {
+        "php": ">=7.0.0"
+    },
+    "require-dev": {},
+    "repositories": [],
+    "autoload": {
+        "psr-4": {
+            "Cclark61\\RaspPi\\WS2812\\": "src"
+        }
+    },
+    "scripts-dev": {
+        "post-install-cmd": [
+            "vendor/bin/security-checker security:check"
+        ],
+        "post-update-cmd": [
+            "vendor/bin/security-checker security:check"
+        ]
+    }
+}
