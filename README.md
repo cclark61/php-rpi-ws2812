@@ -8,3 +8,7 @@ The PHP WS2812 Client is an object oriented PHP library for driving programmable
 # License
 
 [MIT](https://mit-license.org/license.txt)
+
+# Examples
+
+[Examples](EXAMPLES.md)
