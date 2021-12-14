@@ -42,8 +42,8 @@ class Node
         //---------------------------------------------------------------------
         else {
             $index = $args;
-            $config = new \phpOpenFW\Core\AppConfig();
-            if (empty($config->nodes[$index])) {
+            $app_config = new \phpOpenFW\Core\AppConfig();
+            if (empty($app_config->nodes[$index])) {
                 if ($index == 'default') {
                     return static::DefaultConfig();
                 }
@@ -51,8 +51,14 @@ class Node
                     die("[!!] Invalid configuration index.\n");
                 }
             }
-            $config = static::ValidateConfig($config->nodes[$index]);
+            $config = array_merge(static::DefaultConfig(), $app_config->nodes[$index]);
+            $config = static::ValidateConfig($config);
         }
+
+        //---------------------------------------------------------------------
+        // Config Transformations
+        //---------------------------------------------------------------------
+        $config['chip_type'] = strtolower($config['chip_type']);
 
         //---------------------------------------------------------------------
         // Return Config
@@ -76,24 +82,43 @@ class Node
         $config = $args;
 
         //---------------------------------------------------------------------
+        // Check Chip Type
+        //---------------------------------------------------------------------
+        $valid_chip_types = ['ws2812', 'sk6812', 'sk9822'];
+        if (empty($config['chip_type'])) {
+            die("[!!] Node chip type (chip_type) not specified.\n");
+        }
+        else if (!in_array($config['chip_type'], $valid_chip_types)) {
+            $str_valid_chips = implode(', ' , $valid_chip_types);
+            die("[!!] Invalid node chip type specified. Valid values are: {$str_valid_chips}.\n");
+        }
+
+        //---------------------------------------------------------------------
         // Check Host
         //---------------------------------------------------------------------
         if (empty($config['host'])) {
-            die("[!!] Node host (IP address or hostname) not specified.\n");
+            die("[!!] Node host (host) not specified.\n");
         }
 
         //---------------------------------------------------------------------
         // Check Port
         //---------------------------------------------------------------------
         if (empty($config['port'])) {
-            die("[!!] Node port not specified.\n");
+            die("[!!] Node port (port) not specified.\n");
+        }
+
+        //---------------------------------------------------------------------
+        // Check Channel
+        //---------------------------------------------------------------------
+        if (empty($config['channel'])) {
+            die("[!!] Node channel (channel) not specified.\n");
         }
 
         //---------------------------------------------------------------------
         // Check number of LEDs
         //---------------------------------------------------------------------
         if (empty($config['num_leds'])) {
-            die("[!!] Number of LEDs in the node was not specified.\n");
+            die("[!!] Number of LEDs (num_leds) in the node was not specified.\n");
         }
 
         //---------------------------------------------------------------------
@@ -114,6 +139,8 @@ class Node
         //---------------------------------------------------------------------
         $config = [
             'index' => 'default',
+            'chip_type' => 'ws2812',
+            'channel' => 1,
             'host' => '127.0.0.1',
             'port' => 9999,
             'num_leds' => 10
