@@ -123,8 +123,8 @@ class Node
         //---------------------------------------------------------------------
         // Check number of LEDs
         //---------------------------------------------------------------------
-        if (empty($config['num_leds'])) {
-            die("[!!] Number of LEDs (num_leds) in the node was not specified.\n");
+        if (empty($config['led_count'])) {
+            die("[!!] Number of LEDs (led_count) in the node was not specified.\n");
         }
 
         //---------------------------------------------------------------------
@@ -150,7 +150,7 @@ class Node
             'channel' => 1,
             'host' => '127.0.0.1',
             'port' => 9999,
-            'num_leds' => 10
+            'led_count' => 10
         ];
 
         //---------------------------------------------------------------------

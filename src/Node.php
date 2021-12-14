@@ -24,7 +24,7 @@ class Node
     protected $gpionum = false;
     protected $chip_type = false;
     protected $channel = false;
-    protected $num_leds = false;
+    protected $led_count = false;
 
     //=========================================================================
     //=========================================================================
@@ -74,7 +74,7 @@ class Node
     //=========================================================================
     public function IsValid()
     {
-        return ($this->config && $this->node_socket && $this->num_leds);
+        return ($this->config && $this->node_socket && $this->led_count);
     }
 
     //=========================================================================
@@ -84,7 +84,7 @@ class Node
     //=========================================================================
     public function ClearNode()
     {
-        $data = "reset;setup {$this->channel},{$this->num_leds};init;fill 1,000000;render;";
+        $data = "reset;setup {$this->channel},{$this->led_count};init;fill 1,000000;render;";
         $this->WriteCommand($data);
     }
 
@@ -103,9 +103,9 @@ class Node
     // Set Number LEDS
     //=========================================================================
     //=========================================================================
-    public function SetNumLEDs(Integer $num_leds)
+    public function SetLEDCount(Integer $led_count)
     {
-        $this->num_leds = $num_leds;
+        $this->led_count = $led_count;
     }
 
     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -132,11 +132,17 @@ class Node
     public function Setup(Array $args=[])
     {
         $channel = $this->channel;
-        $num_leds = $this->num_leds;
+        $led_count = $this->led_count;
         $invert = 0;
         $global_brightness = 255;
+        $led_type = 3;
+        $gpionum = $this->gpionum();
         extract($args);
-        $this->WriteCommand("setup {$channel},{$num_leds};");
+
+        if ($this->chip_type == 'ws2812') {
+            $cmd = "setup {$channel},{$led_count},{$led_type},{$invert},{$global_brightness},{$gpionum};";
+            $this->WriteCommand($cmd);
+        }
     }
 
     //=========================================================================
@@ -180,7 +186,7 @@ class Node
         $this->gpionum = $config['gpionum'];
         $this->chip_type = $config['chip_type'];
         $this->channel = $config['channel'];
-        $this->num_leds = $config['num_leds'];
+        $this->led_count = $config['led_count'];
         return true;
     }
 
