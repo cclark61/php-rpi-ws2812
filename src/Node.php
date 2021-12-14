@@ -20,6 +20,8 @@ class Node
     // Class Members
     //=========================================================================
     protected $config = false;
+    protected $buffering = false;
+    protected $buffer = false;
     protected $node_socket = false;
     protected $gpionum = false;
     protected $chip_type = false;
@@ -84,6 +86,7 @@ class Node
     //=========================================================================
     public function ClearNode()
     {
+        $this->Reset();
         $data = "reset;setup {$this->channel},{$this->led_count};init;fill 1,000000;render;";
         $this->WriteCommand($data);
     }
@@ -108,9 +111,19 @@ class Node
         $this->led_count = $led_count;
     }
 
+    //=========================================================================
+    //=========================================================================
+    // Set Buffering
+    //=========================================================================
+    //=========================================================================
+    public function SetBuffering($buffering)
+    {
+        $this->buffering = (bool)$buffering;
+    }
+
     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    // Command Methods
+    // Setup / Initialization Command Methods
     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -136,13 +149,28 @@ class Node
         $invert = 0;
         $global_brightness = 255;
         $led_type = 3;
-        $gpionum = $this->gpionum();
+        $gpionum = $this->gpionum;
         extract($args);
 
-        if ($this->chip_type == 'ws2812') {
+        //---------------------------------------------------------------------
+        // WS2812
+        //---------------------------------------------------------------------
+        if ($this->chip_type == 'ws2812' || $this->chip_type == 'sk6812') {
             $cmd = "setup {$channel},{$led_count},{$led_type},{$invert},{$global_brightness},{$gpionum};";
             $this->WriteCommand($cmd);
+            return true;
         }
+        //---------------------------------------------------------------------
+        // SK9822
+        //---------------------------------------------------------------------
+        else if ($this->chip_type == 'sk9822') {
+            // To Do...
+        }
+
+        //---------------------------------------------------------------------
+        // Setup Failed
+        //---------------------------------------------------------------------
+        return false;
     }
 
     //=========================================================================
@@ -157,12 +185,41 @@ class Node
 
     //=========================================================================
     //=========================================================================
-    // Init
+    // Render
     //=========================================================================
     //=========================================================================
-    public function Render()
+    public function Render(Array $args=[])
     {
-        $this->WriteCommand('render;');
+        $delay = 0;
+        $write_buffer = true;
+        extract($args);
+        $cmd = 'render;';
+        if ($delay) {
+            $cmd = "delay {$delay};{$cmd}";
+        }
+        $this->WriteCommand($cmd, $write_buffer);
+    }
+
+    //=========================================================================
+    //=========================================================================
+    // Delay
+    //=========================================================================
+    //=========================================================================
+    public function Delay($delay)
+    {
+        $this->WriteCommand("delay {$delay};");
+    }
+
+    //=========================================================================
+    //=========================================================================
+    // Reset, Setup, Initialize Method
+    //=========================================================================
+    //=========================================================================
+    public function RSI(Array $args=[])
+    {
+        $this->Reset($args);
+        $this->Setup($args);
+        $this->Init($args);
     }
 
     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -178,15 +235,37 @@ class Node
     //=========================================================================
     protected function InitiateNode(Array $config)
     {
+        //---------------------------------------------------------------------
+        // Open Socket to Node
+        //---------------------------------------------------------------------
         $sock = fsockopen($config['host'], $config['port']);
         if (!$sock) {
             die("[!!] Failed to open remote connection to node.\n");
         }
         $this->node_socket = $sock;
+
+        //---------------------------------------------------------------------
+        // Set class values from config
+        //---------------------------------------------------------------------
         $this->gpionum = $config['gpionum'];
         $this->chip_type = $config['chip_type'];
         $this->channel = $config['channel'];
         $this->led_count = $config['led_count'];
+        if (isset($config['buffering'])) {
+            $this->buffering = $config['buffering'];
+        }
+        else {
+            $this->buffering = false;
+        }
+
+        //---------------------------------------------------------------------
+        // Reset, Setup, and Init Hardware
+        //---------------------------------------------------------------------
+        $this->RSI();
+
+        //---------------------------------------------------------------------
+        // Return Success
+        //---------------------------------------------------------------------
         return true;
     }
 
@@ -195,9 +274,19 @@ class Node
     // Write Command
     //=========================================================================
     //=========================================================================
-    protected function WriteCommand(String $cmd)
+    protected function WriteCommand(String $cmd, $write_buffer=false)
     {
-        return fwrite($this->node_socket, $cmd);
+        if ($write_buffer || !$this->buffer) {
+            if ($this->buffer) {
+                if (substr($this->buffer, strlen($this->buffer) - 1, 1) != ';') {
+                    $this->buffer .= ';';
+                }
+                $cmd = $this->buffer . $cmd;
+                $this->buffer = false;
+            }
+            return fwrite($this->node_socket, $cmd);
+        }
+        return true;
     }
 
 }
