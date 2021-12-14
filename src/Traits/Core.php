@@ -58,9 +58,9 @@ trait Core
     public function __destruct()
     {
         //---------------------------------------------------------------------
-        // Turn Off LEDs
+        // Clear (Turn Off LEDs)
         //---------------------------------------------------------------------
-        $this->ClearNode();
+        $this->Clear();
 
         //---------------------------------------------------------------------
         // Close Socket
@@ -85,7 +85,7 @@ trait Core
     // Clear Node (Turn Off)
     //=========================================================================
     //=========================================================================
-    public function ClearNode()
+    public function Clear()
     {
         $this->Reset();
         $data = "reset;setup {$this->channel},{$this->led_count};init;fill 1,000000;render;";
@@ -213,6 +213,28 @@ trait Core
 
     //=========================================================================
     //=========================================================================
+    // Brightness
+    //=========================================================================
+    //=========================================================================
+    public function Brightness($args)
+    {
+        if (is_integer($args)) {
+            $args = ['brightness' => $args];
+        }
+        if (!is_array($args)) {
+            print "\n[!!] Invalid brightness arguments. Array or integer expected.";
+        }
+        if (is_array($args)) {
+            extract($this->DefaultCommandArgs($args));
+        }
+        if ($brightness < 0 || $brightness > 255) {
+            print "\n[!!] Invalid brightness. Valid value range is 0 - 255.";
+        }
+        $this->WriteCommand("brightness {$channel}, {$brightness}, {$start}, {$len};");
+    }
+
+    //=========================================================================
+    //=========================================================================
     // Reset, Setup, Initialize Method
     //=========================================================================
     //=========================================================================
@@ -288,6 +310,25 @@ trait Core
         // Return Success
         //---------------------------------------------------------------------
         return true;
+    }
+
+    //=========================================================================
+    //=========================================================================
+    // Default Command Args
+    //=========================================================================
+    //=========================================================================
+    protected function DefaultCommandArgs(Array $args)
+    {
+        $def_args = [
+            'channel' => $this->channel,
+            'start' => 0,
+            'len' => $this->led_count,
+            'brightness' => 255
+        ];
+        if ($args) {
+            $def_args = array_merge($def_args, $args);
+        }
+        return $def_args;
     }
 
 }
