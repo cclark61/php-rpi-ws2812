@@ -35,7 +35,7 @@ class Node
         // Config is an array
         //---------------------------------------------------------------------
         if (is_array($args)) {
-            $config = static::ValidateConfig($args);
+            $config = static::ValidateConfig(static::DefaultConfig($args));
         }
         //---------------------------------------------------------------------
         // Config index given
@@ -51,8 +51,7 @@ class Node
                     die("[!!] Invalid configuration index.\n");
                 }
             }
-            $config = array_merge(static::DefaultConfig(), $app_config->nodes[$index]);
-            $config = static::ValidateConfig($config);
+            $config = static::ValidateConfig(static::DefaultConfig($app_config->nodes[$index]));
         }
 
         //---------------------------------------------------------------------
@@ -80,6 +79,13 @@ class Node
             die("[!!] Node configuration must be an array.\n");
         }
         $config = $args;
+
+        //---------------------------------------------------------------------
+        // GPIO Pin Number
+        //---------------------------------------------------------------------
+        if (empty($config['gpionum'])) {
+            die("[!!] Node GPIO pin number (gpionum) not specified.\n");
+        }
 
         //---------------------------------------------------------------------
         // Check Chip Type
@@ -139,6 +145,7 @@ class Node
         //---------------------------------------------------------------------
         $config = [
             'index' => 'default',
+            'gpionum' => 18,
             'chip_type' => 'ws2812',
             'channel' => 1,
             'host' => '127.0.0.1',

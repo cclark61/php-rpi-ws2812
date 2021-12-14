@@ -21,6 +21,7 @@ class Node
     //=========================================================================
     protected $config = false;
     protected $node_socket = false;
+    protected $gpionum = false;
     protected $chip_type = false;
     protected $channel = false;
     protected $num_leds = false;
@@ -132,6 +133,8 @@ class Node
     {
         $channel = $this->channel;
         $num_leds = $this->num_leds;
+        $invert = 0;
+        $global_brightness = 255;
         extract($args);
         $this->WriteCommand("setup {$channel},{$num_leds};");
     }
@@ -174,6 +177,7 @@ class Node
             die("[!!] Failed to open remote connection to node.\n");
         }
         $this->node_socket = $sock;
+        $this->gpionum = $config['gpionum'];
         $this->chip_type = $config['chip_type'];
         $this->channel = $config['channel'];
         $this->num_leds = $config['num_leds'];
