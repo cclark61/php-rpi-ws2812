@@ -22,9 +22,17 @@ trait Fill
     // Fill Method
     //=========================================================================
     //=========================================================================
-    public function Fill()
+    public function Fill($args)
     {
-        
+        if (is_scalar($args)) {
+            $args = ['color' => $args];
+        }
+        $bit_op = false;
+        $args = $this->DefaultCommandArgs($args);
+        extract($args);
+        $cmd = "fill {$channel}, {$color}, {$start}, {$len}";
+        $cmd .= ($bit_op) ? ($bit_op . ';') : (';');
+        $this->WriteCommand($cmd);
     }
 
 }
