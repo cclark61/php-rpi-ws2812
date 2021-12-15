@@ -75,7 +75,9 @@ trait Core
         //---------------------------------------------------------------------
         // Clear (Turn Off LEDs)
         //---------------------------------------------------------------------
-        $this->Clear();
+        if ($this->GetOpt('clear_on_exit')) {
+            $this->Clear();
+        }
 
         //---------------------------------------------------------------------
         // Close Socket
@@ -104,7 +106,7 @@ trait Core
     {
         $this->Reset();
         $data = "reset;setup {$this->channel},{$this->led_count};init;fill 1,000000;render;";
-        $this->WriteCommand($data);
+        $this->WriteCommand($data, true);
     }
 
     //=========================================================================
