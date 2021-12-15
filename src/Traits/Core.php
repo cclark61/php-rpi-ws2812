@@ -28,6 +28,7 @@ trait Core
     protected $chip_type = false;
     protected $channel = false;
     protected $led_count = false;
+    protected $brightness = 255;
 
     //=========================================================================
     //=========================================================================
@@ -230,6 +231,7 @@ trait Core
         if ($brightness < 0 || $brightness > 255) {
             print "\n[!!] Invalid brightness. Valid value range is 0 - 255.";
         }
+        $this->brightness = $brightness;
         $this->WriteCommand("brightness {$channel}, {$brightness}, {$start}, {$len};");
     }
 
@@ -300,6 +302,9 @@ trait Core
         else {
             $this->buffering = false;
         }
+        if (isset($config['brightness'])) {
+            $this->brightness = $config['brightness'];
+        }
 
         //---------------------------------------------------------------------
         // Reset, Setup, and Init Hardware
@@ -323,7 +328,7 @@ trait Core
             'channel' => $this->channel,
             'start' => 0,
             'len' => $this->led_count,
-            'brightness' => 255
+            'brightness' => $this->brightness
         ];
         if ($args) {
             $def_args = array_merge($def_args, $args);

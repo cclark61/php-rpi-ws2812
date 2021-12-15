@@ -24,14 +24,30 @@ trait Fade
     //=========================================================================
     public function Fade(Array $args=[])
     {
-        $start_brightness = 0;
-        $end_brightness = 255;
-        $delay = 50;
+        $start_brightness = $this->brightness;
+        $end_brightness = 0;
+        $delay = 20;
         $step = 1;
         $args = $this->DefaultCommandArgs($args);
         extract($args);
-        $cmd = "fade {$start_brightness}, {$end_brightness}, {$delay}, {$start}, {$len}";
-        $this->WriteCommand($cmd);
+        $cmd = "fade {$channel}, {$start_brightness}, {$end_brightness}, {$delay}, {$step}, {$start}, {$len}";
+        return $this->WriteCommand($cmd);
+    }
+
+    //=========================================================================
+    //=========================================================================
+    // Fade In Method
+    //=========================================================================
+    //=========================================================================
+    public function FadeIn(Array $args=[])
+    {
+        if (!isset($args['start_brightness'])) {
+            $args['start_brightness'] = 0;
+        }
+        if (!isset($args['end_brightness'])) {
+            $args['end_brightness'] = $this->brightness;
+        }
+        return $this->Fade($args);
     }
 
 }
