@@ -22,16 +22,15 @@ trait Blink
     // Blink Method
     //=========================================================================
     //=========================================================================
-    public function Blink($args=[])
+    public function Blink(Array $args=[])
     {
-        if (is_scalar($args)) {
-            $args = ['color' => $args];
-        }
-        $bit_op = false;
+        $color1 = '000000';
+        $color2 = 'FFFFFF';
+        $blink_count = 20;
+        $delay = 250;
         $args = $this->DefaultCommandArgs($args);
         extract($args);
-        $cmd = "fill {$channel}, {$color}, {$start}, {$len}";
-        $cmd .= ($bit_op) ? ($bit_op . ';') : (';');
+        $cmd = "blink {$channel}, {$color1}, {$color2}, {$delay}, {$blink_count}, {$start}, {$len};";
         $this->WriteCommand($cmd);
     }
 
