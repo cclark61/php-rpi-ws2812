@@ -2,10 +2,10 @@
 //*****************************************************************************
 //*****************************************************************************
 /**
- * WS2812 Node Rainbow Trait
+ * WS2812 Node Rotate Trait
  *
  * @package         Cclark61\RPi\WS2812
- * @subpackage      Traits
+ * @subpackage      Traits\Node
  * @author          Christian J. Clark
  * @copyright       Christian J. Clark
  * @link            https://github.com/cclark61/php-rpi-ws2812
@@ -13,16 +13,16 @@
 //*****************************************************************************
 //*****************************************************************************
 
-namespace Cclark61\RPi\WS2812\Traits;
+namespace Cclark61\RPi\WS2812\Traits\Node;
 
-trait Rainbow
+trait Rotate
 {
     //=========================================================================
     //=========================================================================
-    // Rainbow Method
+    // Rotate Method
     //=========================================================================
     //=========================================================================
-    public function Rainbow(Array $args=[])
+    public function Rotate(Array $args=[])
     {
 
     }

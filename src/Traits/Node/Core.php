@@ -5,7 +5,7 @@
  * WS2812 Node Core Trait
  *
  * @package         Cclark61\RPi\WS2812
- * @subpackage      Traits
+ * @subpackage      Traits\Node
  * @author          Christian J. Clark
  * @copyright       Christian J. Clark
  * @link            https://github.com/cclark61/php-rpi-ws2812
@@ -13,7 +13,7 @@
 //*****************************************************************************
 //*****************************************************************************
 
-namespace Cclark61\RPi\WS2812\Traits;
+namespace Cclark61\RPi\WS2812\Traits\Node;
 
 trait Core
 {
@@ -41,7 +41,7 @@ trait Core
         //---------------------------------------------------------------------
         // Get Configuration
         //---------------------------------------------------------------------
-        $this->config = \Cclark61\RPi\WS2812\Config\Node::GetConfig($args);
+        $this->config = static::GetConfig($args);
         if (!$this->config) {
             die("[!!] Invalid node configurarion.\n");
         }

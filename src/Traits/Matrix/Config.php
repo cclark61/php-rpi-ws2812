@@ -2,9 +2,10 @@
 //*****************************************************************************
 //*****************************************************************************
 /**
- * WS2812 Node Class
+ * WS2812 Matrix Config Trait
  *
  * @package         Cclark61\RPi\WS2812
+ * @subpackage      Traits\Matrix
  * @author          Christian J. Clark
  * @copyright       Christian J. Clark
  * @link            https://github.com/cclark61/php-rpi-ws2812
@@ -12,20 +13,9 @@
 //*****************************************************************************
 //*****************************************************************************
 
-namespace Cclark61\RPi\WS2812;
+namespace Cclark61\RPi\WS2812\Traits\Matrix;
 
-class Node
+trait Config
 {
-    //=========================================================================
-    // Traits
-    //=========================================================================
-    use Traits\Node\Blink;
-    use Traits\Node\Config;
-    use Traits\Node\Core;
-    use Traits\Node\Fade;
-    use Traits\Node\Fill;
-    use Traits\Node\Gradient;
-    use Traits\Node\Rainbow;
-    use Traits\Node\Random;
-    use Traits\Node\Rotate;
+
 }
