@@ -20,6 +20,7 @@ trait Core
     //=========================================================================
     // Class Members
     //=========================================================================
+    protected static $color_components = 'RGBWL';
     protected $config = false;
     protected $buffering = false;
     protected $buffer = false;

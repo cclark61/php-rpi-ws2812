@@ -22,4 +22,7 @@ class Node
     use Traits\Core;
     use Traits\Fill;
     use Traits\Fade;
+    use Traits\Gradient;
+    use Traits\Random;
+    use Traits\Blink;
 }
