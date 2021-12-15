@@ -2,9 +2,10 @@
 //*****************************************************************************
 //*****************************************************************************
 /**
- * WS2812 LED Matrix Class
+ * WS2812 LED Node Trait
  *
  * @package         Cclark61\RPi\WS2812
+ * @subpackage      Traits
  * @author          Christian J. Clark
  * @copyright       Christian J. Clark
  * @link            https://github.com/cclark61/php-rpi-ws2812
@@ -12,14 +13,14 @@
 //*****************************************************************************
 //*****************************************************************************
 
-namespace Cclark61\RPi\WS2812;
+namespace Cclark61\RPi\WS2812\Traits;
 
-class Matrix
+trait Node
 {
     //=========================================================================
     // Traits
     //=========================================================================
-    use Traits\Node;
-    use Traits\Node\TwoD\DrawCircle;
-
+    use Node\Core\Buffer;
+    use Node\Core\Config;
+    use Node\Core\Core;
 }

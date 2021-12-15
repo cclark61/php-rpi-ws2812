@@ -2,7 +2,7 @@
 //*****************************************************************************
 //*****************************************************************************
 /**
- * WS2812 Node Class
+ * WS2812 LED Strip Class
  *
  * @package         Cclark61\RPi\WS2812
  * @author          Christian J. Clark
@@ -14,14 +14,12 @@
 
 namespace Cclark61\RPi\WS2812;
 
-class Node
+class Strip
 {
     //=========================================================================
     // Traits
     //=========================================================================
-    use Traits\Node\Core\Buffer;
-    use Traits\Node\Core\Config;
-    use Traits\Node\Core;
+    use Traits\Node;
     use Traits\Node\OneD\Blink;
     use Traits\Node\OneD\Fade;
     use Traits\Node\OneD\Fill;
