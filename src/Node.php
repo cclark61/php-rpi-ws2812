@@ -22,11 +22,11 @@ class Node
     use Traits\Node\Core\Buffer;
     use Traits\Node\Core\Config;
     use Traits\Node\Core;
-    use Traits\Node\Blink;
-    use Traits\Node\Fade;
-    use Traits\Node\Fill;
-    use Traits\Node\Gradient;
-    use Traits\Node\Rainbow;
-    use Traits\Node\Random;
-    use Traits\Node\Rotate;
+    use Traits\Node\OneD\Blink;
+    use Traits\Node\OneD\Fade;
+    use Traits\Node\OneD\Fill;
+    use Traits\Node\OneD\Gradient;
+    use Traits\Node\OneD\Rainbow;
+    use Traits\Node\OneD\Random;
+    use Traits\Node\OneD\Rotate;
 }

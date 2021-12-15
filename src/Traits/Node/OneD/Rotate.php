@@ -2,10 +2,10 @@
 //*****************************************************************************
 //*****************************************************************************
 /**
- * WS2812 Node Random Trait
+ * WS2812 Node 1D Rotate Trait
  *
  * @package         Cclark61\RPi\WS2812
- * @subpackage      Traits\Node
+ * @subpackage      Traits\Node\OneD
  * @author          Christian J. Clark
  * @copyright       Christian J. Clark
  * @link            https://github.com/cclark61/php-rpi-ws2812
@@ -13,28 +13,27 @@
 //*****************************************************************************
 //*****************************************************************************
 
-namespace Cclark61\RPi\WS2812\Traits\Node;
+namespace Cclark61\RPi\WS2812\Traits\Node\OneD;
 
-trait Random
+trait Rotate
 {
     //=========================================================================
     //=========================================================================
-    // Random Method
+    // Rotate Method
     //=========================================================================
     //=========================================================================
-    public function Random($args=[])
+    public function Rotate(Array $args=[])
     {
-        $color_components = 'L';
-        if (is_string($args)) {
-            $args = ['color_components' => $args];
-        }
-        else if (!is_array($args)) {
-            $args = [];
-        }
+        $places = 1;
+        $direction = 0;
+        $rrggbb = '';
         $args = $this->DefaultCommandArgs($args);
         extract($args);
-        $color_components = strtoupper($color_components);
-        $cmd = "random {$channel}, {$start}, {$len}, {$color_components};";
+        $cmd = "rotate {$channel}, {$places}, {$direction}";
+        if ($rrggbb) {
+            $cmd .= ', ' . $rrggbb;
+        }
+        $cmd .= ';';
         $this->WriteCommand($cmd);
     }
 

@@ -2,10 +2,10 @@
 //*****************************************************************************
 //*****************************************************************************
 /**
- * WS2812 Node Blink Trait
+ * WS2812 Node 1D Gradient Trait
  *
  * @package         Cclark61\RPi\WS2812
- * @subpackage      Traits\Node
+ * @subpackage      Traits\Node\OneD
  * @author          Christian J. Clark
  * @copyright       Christian J. Clark
  * @link            https://github.com/cclark61/php-rpi-ws2812
@@ -13,24 +13,33 @@
 //*****************************************************************************
 //*****************************************************************************
 
-namespace Cclark61\RPi\WS2812\Traits\Node;
+namespace Cclark61\RPi\WS2812\Traits\Node\OneD;
 
-trait Blink
+trait Gradient
 {
     //=========================================================================
     //=========================================================================
-    // Blink Method
+    // Gradient Method
     //=========================================================================
     //=========================================================================
-    public function Blink(Array $args=[])
+    public function Gradient($args=[])
     {
-        $color1 = '000000';
-        $color2 = 'FFFFFF';
-        $blink_count = 20;
-        $delay = 250;
+        $color_component = 'L';
+        if (is_string($args) && strlen($args) == 1) {
+            $args = ['color_component' => $args];
+        }
+        else if (!is_array($args)) {
+            $args = [];
+        }
+        $start_level = 0;
+        $end_level = 255;
         $args = $this->DefaultCommandArgs($args);
         extract($args);
-        $cmd = "blink {$channel}, {$color1}, {$color2}, {$delay}, {$blink_count}, {$start}, {$len};";
+        $color_component = strtoupper($color_component);
+        if (!in_array($color_component, str_split(static::$color_components, 1))) {
+            die("[!!] Invalid color component.\n");
+        }
+        $cmd = "gradient {$channel}, {$color_component}, {$start_level}, {$end_level}, {$start}, {$len};";
         $this->WriteCommand($cmd);
     }
 

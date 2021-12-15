@@ -2,10 +2,10 @@
 //*****************************************************************************
 //*****************************************************************************
 /**
- * WS2812 Node Fill Trait
+ * WS2812 Node 1D Blink Trait
  *
  * @package         Cclark61\RPi\WS2812
- * @subpackage      Traits\Node
+ * @subpackage      Traits\Node\OneD
  * @author          Christian J. Clark
  * @copyright       Christian J. Clark
  * @link            https://github.com/cclark61/php-rpi-ws2812
@@ -13,25 +13,24 @@
 //*****************************************************************************
 //*****************************************************************************
 
-namespace Cclark61\RPi\WS2812\Traits\Node;
+namespace Cclark61\RPi\WS2812\Traits\Node\OneD;
 
-trait Fill
+trait Blink
 {
     //=========================================================================
     //=========================================================================
-    // Fill Method
+    // Blink Method
     //=========================================================================
     //=========================================================================
-    public function Fill($args)
+    public function Blink(Array $args=[])
     {
-        if (is_scalar($args)) {
-            $args = ['color' => $args];
-        }
-        $bit_op = false;
+        $color1 = '000000';
+        $color2 = 'FFFFFF';
+        $blink_count = 20;
+        $delay = 250;
         $args = $this->DefaultCommandArgs($args);
         extract($args);
-        $cmd = "fill {$channel}, {$color}, {$start}, {$len}";
-        $cmd .= ($bit_op) ? ($bit_op . ';') : (';');
+        $cmd = "blink {$channel}, {$color1}, {$color2}, {$delay}, {$blink_count}, {$start}, {$len};";
         $this->WriteCommand($cmd);
     }
 
