@@ -4,10 +4,16 @@
     "version": "0.1.0",
     "license": "MIT",
     "require": {
-        "php": ">=7.0.0"
+        "php": ">=7.0.0",
+        "phpopenfw/phpopenfw3" : "dev-master",
     },
     "require-dev": {},
-    "repositories": [],
+    "repositories": [
+        {
+            "type": "git",
+            "url": "https://github.com/phpopenfw/phpOpenFW3.git"
+        }
+    ],
     "autoload": {
         "psr-4": {
             "Cclark61\\RPi\\WS2812\\": "src"
