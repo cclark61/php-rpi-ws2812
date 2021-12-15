@@ -19,9 +19,10 @@ class Node
     //=========================================================================
     // Traits
     //=========================================================================
-    use Traits\Node\Blink;
-    use Traits\Node\Config;
+    use Traits\Node\Core\Buffer;
+    use Traits\Node\Core\Config;
     use Traits\Node\Core;
+    use Traits\Node\Blink;
     use Traits\Node\Fade;
     use Traits\Node\Fill;
     use Traits\Node\Gradient;

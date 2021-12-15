@@ -2,6 +2,7 @@
     "name": "cclark61/php-rpi-ws2812",
     "desc": "PHP Raspberry PI Client",
     "version": "0.1.0",
+    "license": "MIT",
     "require": {
         "php": ">=7.0.0"
     },

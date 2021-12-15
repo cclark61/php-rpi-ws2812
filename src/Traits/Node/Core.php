@@ -18,12 +18,15 @@ namespace Cclark61\RPi\WS2812\Traits\Node;
 trait Core
 {
     //=========================================================================
+    // Traits
+    //=========================================================================
+    use \phpOpenFW\Traits\Opts;
+
+    //=========================================================================
     // Class Members
     //=========================================================================
     protected static $color_components = 'RGBWL';
     protected $config = false;
-    protected $buffering = false;
-    protected $buffer = false;
     protected $node_socket = false;
     protected $gpionum = false;
     protected $chip_type = false;
@@ -36,7 +39,7 @@ trait Core
     // Constructor
     //=========================================================================
     //=========================================================================
-    public function __construct($args='default')
+    public function __construct($args='default', Array $opts=[])
     {
         //---------------------------------------------------------------------
         // Get Configuration
@@ -49,7 +52,7 @@ trait Core
         //---------------------------------------------------------------------
         // Initiate Node
         //---------------------------------------------------------------------
-        $this->InitiateNode($this->config);
+        $this->InitiateNode($this->config, $opts);
     }
 
     //==========================================================================
@@ -122,16 +125,6 @@ trait Core
     public function SetLEDCount(Integer $led_count)
     {
         $this->led_count = $led_count;
-    }
-
-    //=========================================================================
-    //=========================================================================
-    // Set Buffering
-    //=========================================================================
-    //=========================================================================
-    public function SetBuffering($buffering)
-    {
-        $this->buffering = (bool)$buffering;
     }
 
     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -265,16 +258,28 @@ trait Core
     //=========================================================================
     public function WriteCommand(String $cmd, $write_buffer=false)
     {
-        if ($write_buffer || !$this->buffer) {
-            if ($this->buffer) {
-                if (substr($this->buffer, strlen($this->buffer) - 1, 1) != ';') {
-                    $this->buffer .= ';';
-                }
-                $cmd = $this->buffer . $cmd;
-                $this->buffer = false;
-            }
-            return fwrite($this->node_socket, $cmd);
+        //---------------------------------------------------------------------
+        // Command cannot be empty
+        //---------------------------------------------------------------------
+        if (!$this->BufferCommand($cmd)) {
+            return false;
         }
+
+        //---------------------------------------------------------------------
+        // Is Buffering On?
+        //---------------------------------------------------------------------
+        $buffering = $this->GetOpt('buffering');
+
+        //---------------------------------------------------------------------
+        // Write Buffer?
+        //---------------------------------------------------------------------
+        if ($write_buffer || !$buffering) {
+            $this->WriteBuffer();
+        }
+
+        //---------------------------------------------------------------------
+        // Success
+        //---------------------------------------------------------------------
         return true;
     }
 
@@ -289,7 +294,7 @@ trait Core
     // Initiate Node
     //=========================================================================
     //=========================================================================
-    protected function InitiateNode(Array $config)
+    protected function InitiateNode(Array $config, Array $opts=[])
     {
         //---------------------------------------------------------------------
         // Open Socket to Node
@@ -299,6 +304,7 @@ trait Core
             die("[!!] Failed to open remote connection to node.\n");
         }
         $this->node_socket = $sock;
+        $this->buffer = [];
 
         //---------------------------------------------------------------------
         // Set class values from config
@@ -308,13 +314,23 @@ trait Core
         $this->channel = $config['channel'];
         $this->led_count = $config['led_count'];
         if (isset($config['buffering'])) {
-            $this->buffering = $config['buffering'];
+            $buffering = $config['buffering'];
         }
         else {
-            $this->buffering = false;
+            $buffering = false;
         }
         if (isset($config['brightness'])) {
             $this->brightness = $config['brightness'];
+        }
+
+        //---------------------------------------------------------------------
+        // Options
+        //---------------------------------------------------------------------
+        $this->SetOpt('buffering', $buffering);
+        if ($opts) {
+            foreach ($opts as $opt_key => $opt_val) {
+                $this->SetOpt($opt_key, $opt_val);
+            }
         }
 
         //---------------------------------------------------------------------
