@@ -22,16 +22,19 @@ trait Random
     // Random Method
     //=========================================================================
     //=========================================================================
-    public function Random($args)
+    public function Random($args=[])
     {
-        if (is_scalar($args)) {
-            $args = ['color' => $args];
+        $color_components = 'L';
+        if (is_string($args)) {
+            $args = ['color_components' => $args];
         }
-        $bit_op = false;
+        else if (!is_array($args)) {
+            $args = [];
+        }
         $args = $this->DefaultCommandArgs($args);
         extract($args);
-        $cmd = "fill {$channel}, {$color}, {$start}, {$len}";
-        $cmd .= ($bit_op) ? ($bit_op . ';') : (';');
+        $color_components = strtoupper($color_components);
+        $cmd = "random {$channel}, {$start}, {$len}, {$color_components};";
         $this->WriteCommand($cmd);
     }
 

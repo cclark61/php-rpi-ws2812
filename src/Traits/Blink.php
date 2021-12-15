@@ -22,7 +22,7 @@ trait Blink
     // Blink Method
     //=========================================================================
     //=========================================================================
-    public function Blink($args)
+    public function Blink($args=[])
     {
         if (is_scalar($args)) {
             $args = ['color' => $args];
