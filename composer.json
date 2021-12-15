@@ -5,7 +5,7 @@
     "license": "MIT",
     "require": {
         "php": ">=7.0.0",
-        "phpopenfw/phpopenfw3" : "dev-master",
+        "phpopenfw/phpopenfw3" : "dev-master"
     },
     "require-dev": {},
     "repositories": [
