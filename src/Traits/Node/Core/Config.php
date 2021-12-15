@@ -27,36 +27,46 @@ trait Config
     // Get Config
     //=========================================================================
     //=========================================================================
-    public static function GetConfig($args)
+    public static function GetNodeConfig($args)
     {
         //---------------------------------------------------------------------
-        // Config Empty?
+        // App Config
+        //---------------------------------------------------------------------
+        $app_config = new \phpOpenFW\Core\AppConfig();
+
+        //---------------------------------------------------------------------
+        // Config Empty? Is there Default one specified?
         //---------------------------------------------------------------------
         if (!$args) {
-            return static::DefaultConfig();
+            $node_configs = $app_config['nodes'];
+            if (!empty($node_configs)) {
+                $args = key($node_configs);
+            }
+            else {
+                return static::DefaultNodeConfig();                
+            }
         }
 
         //---------------------------------------------------------------------
         // Config is an array
         //---------------------------------------------------------------------
         if (is_array($args)) {
-            $config = static::ValidateConfig(static::DefaultConfig($args));
+            $config = static::ValidateNodeConfig(static::DefaultNodeConfig($args));
         }
         //---------------------------------------------------------------------
         // Config index given
         //---------------------------------------------------------------------
         else {
             $index = $args;
-            $app_config = new \phpOpenFW\Core\AppConfig();
             if (empty($app_config->nodes[$index])) {
                 if ($index == 'default') {
-                    return static::DefaultConfig();
+                    return static::DefaultNodeConfig();
                 }
                 else {
                     die("[!!] Invalid configuration index.\n");
                 }
             }
-            $config = static::ValidateConfig(static::DefaultConfig($app_config->nodes[$index]));
+            $config = static::ValidateNodeConfig(static::DefaultNodeConfig($app_config->nodes[$index]));
         }
 
         //---------------------------------------------------------------------
@@ -75,7 +85,7 @@ trait Config
     // Validate Config
     //=========================================================================
     //=========================================================================
-    public static function ValidateConfig(Array $args)
+    public static function ValidateNodeConfig(Array $args)
     {
         //---------------------------------------------------------------------
         // Check that config is an array
@@ -140,10 +150,10 @@ trait Config
 
     //=========================================================================
     //=========================================================================
-    // Validate Config
+    // Default Node Config
     //=========================================================================
     //=========================================================================
-    public static function DefaultConfig(Array $args=[])
+    public static function DefaultNodeConfig(Array $args=[])
     {
         //---------------------------------------------------------------------
         // Set Default Config

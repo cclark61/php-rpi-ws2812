@@ -12,3 +12,6 @@ The PHP WS2812 Client is an object oriented PHP library for driving programmable
 # Examples
 
 [Examples](EXAMPLES.md)
+
+# References
+[Raspberry Pi Server Internal Commands](https://github.com/tom-2015/rpi-ws2812-server/blob/master/COMMANDS.md)

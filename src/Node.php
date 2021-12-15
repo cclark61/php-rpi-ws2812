@@ -2,10 +2,9 @@
 //*****************************************************************************
 //*****************************************************************************
 /**
- * WS2812 LED Node Trait
+ * WS2812 LED Node Class
  *
  * @package         Cclark61\RPi\WS2812
- * @subpackage      Traits
  * @author          Christian J. Clark
  * @copyright       Christian J. Clark
  * @link            https://github.com/cclark61/php-rpi-ws2812
@@ -13,14 +12,14 @@
 //*****************************************************************************
 //*****************************************************************************
 
-namespace Cclark61\RPi\WS2812\Traits;
+namespace Cclark61\RPi\WS2812;
 
-trait Node
+class Node
 {
     //=========================================================================
     // Traits
     //=========================================================================
-    use Node\Core\Buffer;
-    use Node\Core\Config;
-    use Node\Core\Core;
+    use Traits\Node\Core\Buffer;
+    use Traits\Node\Core\Config;
+    use Traits\Node\Core\Core;
 }

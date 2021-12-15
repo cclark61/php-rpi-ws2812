@@ -39,12 +39,12 @@ trait Core
     // Constructor
     //=========================================================================
     //=========================================================================
-    public function __construct($args='default', Array $opts=[])
+    public function __construct($node_config='', Array $args=[], Array $opts=[])
     {
         //---------------------------------------------------------------------
         // Get Configuration
         //---------------------------------------------------------------------
-        $this->config = static::GetConfig($args);
+        $this->config = static::GetNodeConfig($node_config);
         if (!$this->config) {
             die("[!!] Invalid node configurarion.\n");
         }
@@ -52,7 +52,7 @@ trait Core
         //---------------------------------------------------------------------
         // Initiate Node
         //---------------------------------------------------------------------
-        $this->InitiateNode($this->config, $opts);
+        $this->InitiateNode($this->config, $args, $opts);
     }
 
     //==========================================================================
@@ -60,9 +60,9 @@ trait Core
     // Get Instance Method
     //==========================================================================
     //==========================================================================
-    public static function Instance($args='default')
+    public static function Instance($node_config='', Array $args=[], Array $opts=[])
     {
-        return new static($args);
+        return new static($node_config, $args, $opts);
     }
 
     //=========================================================================
@@ -296,12 +296,12 @@ trait Core
     // Initiate Node
     //=========================================================================
     //=========================================================================
-    protected function InitiateNode(Array $config, Array $opts=[])
+    protected function InitiateNode(Array $node_config, Array $args=[], Array $opts=[])
     {
         //---------------------------------------------------------------------
         // Open Socket to Node
         //---------------------------------------------------------------------
-        $sock = fsockopen($config['host'], $config['port']);
+        $sock = fsockopen($node_config['host'], $node_config['port']);
         if (!$sock) {
             die("[!!] Failed to open remote connection to node.\n");
         }
@@ -311,18 +311,18 @@ trait Core
         //---------------------------------------------------------------------
         // Set class values from config
         //---------------------------------------------------------------------
-        $this->gpionum = $config['gpionum'];
-        $this->chip_type = $config['chip_type'];
-        $this->channel = $config['channel'];
-        $this->led_count = $config['led_count'];
-        if (isset($config['buffering'])) {
-            $buffering = $config['buffering'];
+        $this->gpionum = $node_config['gpionum'];
+        $this->chip_type = $node_config['chip_type'];
+        $this->channel = $node_config['channel'];
+        $this->led_count = $node_config['led_count'];
+        if (isset($node_config['buffering'])) {
+            $buffering = $node_config['buffering'];
         }
         else {
             $buffering = false;
         }
-        if (isset($config['brightness'])) {
-            $this->brightness = $config['brightness'];
+        if (isset($node_config['brightness'])) {
+            $this->brightness = $node_config['brightness'];
         }
 
         //---------------------------------------------------------------------

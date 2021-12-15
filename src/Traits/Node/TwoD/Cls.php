@@ -2,9 +2,10 @@
 //*****************************************************************************
 //*****************************************************************************
 /**
- * WS2812 LED Strip Class
+ * WS2812 Node 2D Cls Trait
  *
  * @package         Cclark61\RPi\WS2812
+ * @subpackage      Traits\Node\TwoD
  * @author          Christian J. Clark
  * @copyright       Christian J. Clark
  * @link            https://github.com/cclark61/php-rpi-ws2812
@@ -12,29 +13,25 @@
 //*****************************************************************************
 //*****************************************************************************
 
-namespace Cclark61\RPi\WS2812;
+namespace Cclark61\RPi\WS2812\Traits\Node\TwoD;
 
-class Strip extends Node
+trait Cls
 {
     //=========================================================================
-    // Traits
     //=========================================================================
-    use Traits\Node\OneD\Blink;
-    use Traits\Node\OneD\Fade;
-    use Traits\Node\OneD\Fill;
-    use Traits\Node\OneD\Gradient;
-    use Traits\Node\OneD\Rainbow;
-    use Traits\Node\OneD\Random;
-    use Traits\Node\OneD\Rotate;
-
+    // Cls Method
     //=========================================================================
     //=========================================================================
-    // Constructor
-    //=========================================================================
-    //=========================================================================
-    public function __construct($node_config='', Array $args=[], Array $opts=[])
+    public function Cls($args=[])
     {
-        parent::__construct($node_config, $args, $opts);
+        $color = 'ffffff';
+        if (is_scalar($args)) {
+            $args = ['color' => (int)$color];
+        }
+        $args = $this->DefaultCommandArgs($args);
+        extract($args);
+        $cmd = "cls {$channel}, {$color};";
+        $this->WriteCommand($cmd);
     }
 
 }
