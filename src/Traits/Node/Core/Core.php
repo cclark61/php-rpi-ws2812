@@ -134,7 +134,7 @@ trait Core
     // Get Number LEDs
     //=========================================================================
     //=========================================================================
-    public function GetLEDCount(Integer $led_count)
+    public function GetLEDCount()
     {
         return $this->led_count;
     }
