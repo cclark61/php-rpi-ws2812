@@ -153,7 +153,7 @@ class LedDisplay
         //----------------------------------------------------------------------
         // Check for out of range pixel position
         //----------------------------------------------------------------------
-        if ($pos <= 0 || $pos > $this->pixel_count) {
+        if ($pos < 0 || $pos > $this->pixel_count) {
             return false;
         }
 
